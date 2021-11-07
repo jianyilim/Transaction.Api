@@ -19,6 +19,7 @@ namespace Transaction.Domain.Transactions
         public string Id { get; set; }
 
         [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
         public decimal Amount { get; set; }
 
         [StringLength(3)]
