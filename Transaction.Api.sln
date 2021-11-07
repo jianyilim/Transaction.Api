@@ -3,16 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.Api", "Transaction.Api\Transaction.Api.csproj", "{C0860167-61DB-45AB-B4C7-E5FAFF00DCC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transaction.Api", "Transaction.Api\Transaction.Api.csproj", "{C0860167-61DB-45AB-B4C7-E5FAFF00DCC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.Domain", "Transaction.Domain\Transaction.Domain.csproj", "{053A5FA3-2D7B-4082-B003-A20D8D5E1164}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transaction.Domain", "Transaction.Domain\Transaction.Domain.csproj", "{053A5FA3-2D7B-4082-B003-A20D8D5E1164}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.Infrastructure", "Transaction.Infrastructure\Transaction.Infrastructure.csproj", "{41C91CB1-6733-4788-A623-78F927236260}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transaction.Infrastructure", "Transaction.Infrastructure\Transaction.Infrastructure.csproj", "{41C91CB1-6733-4788-A623-78F927236260}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{49D713A4-EE7A-4FCA-89B5-D240E58FB987}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.Domain.Test", "Transaction.Domain.Test\Transaction.Domain.Test.csproj", "{A73FA0B6-8E95-4E24-A251-8B04B69DD65D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{41C91CB1-6733-4788-A623-78F927236260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41C91CB1-6733-4788-A623-78F927236260}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41C91CB1-6733-4788-A623-78F927236260}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A73FA0B6-8E95-4E24-A251-8B04B69DD65D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A73FA0B6-8E95-4E24-A251-8B04B69DD65D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A73FA0B6-8E95-4E24-A251-8B04B69DD65D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A73FA0B6-8E95-4E24-A251-8B04B69DD65D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

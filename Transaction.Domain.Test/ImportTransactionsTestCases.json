@@ -1,0 +1,116 @@
+[
+  {
+    "Request": {
+      "FileName": "Transaction.Domain.Test.ImportFile.error",
+      "FileFormat": "CSV"
+    },
+    "ExpectedResult": [],
+    "ExceptionMessage": "Unknown format"
+  },
+  {
+    "Request": {
+      "FileName": "Transaction.Domain.Test.ImportFileIdError.csv",
+      "FileFormat": "CSV"
+    },
+    "ExpectedResult": [],
+    "ExceptionMessage": "Id length must be from 1 to 50."
+  },
+  {
+    "Request": {
+      "FileName": "Transaction.Domain.Test.ImportFile.error",
+      "FileFormat": "XML"
+    },
+    "ExpectedResult": [],
+    "ExceptionMessage": "Unknown format"
+  },
+  {
+    "Request": {
+      "FileName": "Transaction.Domain.Test.ImportFileCurrencyError.xml",
+      "FileFormat": "XML"
+    },
+    "ExpectedResult": [],
+    "ExceptionMessage": "CurrencyCode must be in ISO4217 format."
+  },
+  {
+    "Request": {
+      "FileName": "Transaction.Domain.Test.ImportFileIdError.xml",
+      "FileFormat": "XML"
+    },
+    "ExpectedResult": [],
+    "ExceptionMessage": "Id length must be from 1 to 50."
+  },
+  {
+    "Request": {
+      "FileName": "Transaction.Domain.Test.ImportFileAmountError.xml",
+      "FileFormat": "XML"
+    },
+    "ExpectedResult": [],
+    "ExceptionMessage": "Amount must be positive."
+  },
+  {
+    "Request": {
+      "FileName": "Transaction.Domain.Test.ImportFile.csv",
+      "FileFormat": "CSV"
+    },
+    "ExpectedResult": [
+      {
+        "Id": "Invoice0000001",
+        "Amount": 1000.00,
+        "CurrencyCode": "USD",
+        "TransactionDate": "2019-02-23T12:33:16",
+        "Status": 0,
+        "Timestamp": null
+      },
+      {
+        "Id": "Invoice0000002",
+        "Amount": 300.00,
+        "CurrencyCode": "USD",
+        "TransactionDate": "2019-02-21T02:04:59",
+        "Status": 1,
+        "Timestamp": null
+      }
+    ],
+    "ExceptionMessage": null
+  },
+  {
+    "Request": {
+      "FileName": "Transaction.Domain.Test.ImportFile.xml",
+      "FileFormat": "XML"
+    },
+    "ExpectedResult": [
+      {
+        "Id": "Invoice0000001",
+        "Amount": 1000.00,
+        "CurrencyCode": "USD",
+        "TransactionDate": "2019-02-23T12:33:16",
+        "Status": 0,
+        "Timestamp": null
+      },
+      {
+        "Id": "Invoice0000002",
+        "Amount": 300.00,
+        "CurrencyCode": "USD",
+        "TransactionDate": "2019-02-21T02:04:59",
+        "Status": 1,
+        "Timestamp": null
+      },
+      {
+        "Id": "Inv0000113",
+        "Amount": 200.00,
+        "CurrencyCode": "USD",
+        "TransactionDate": "2019-01-23T13:45:10",
+        "Status": 2,
+        "Timestamp": null
+      },
+      {
+        "Id": "Inv00002",
+        "Amount": 10000.00,
+        "CurrencyCode": "EUR",
+        "TransactionDate": "2019-01-24T16:09:15",
+        "Status": 1,
+        "Timestamp": null
+      }
+    ],
+    "ExceptionMessage": null
+  }
+]
