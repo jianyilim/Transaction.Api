@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,8 @@ namespace Transaction.Api.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 1048576)]
         public Task ImportTransactionsAsync([FromForm] TransactionImportRequest transactionImportRequest, [FromServices] ITransactionImportService transactionImportService)
         {
-            return transactionImportService.ImportTransactionsAsync(transactionImportRequest);
+            using Stream stream = transactionImportRequest.File.OpenReadStream();
+            return transactionImportService.ImportTransactionsAsync(stream, transactionImportRequest.FileFormat);
         }
 
         /// <summary>

@@ -34,7 +34,7 @@ namespace Transaction.Domain.Transactions
             if (transactionSearchRequest.ToDate != null)
             {
                 query = query
-                    .Where(transaction => transaction.TransactionDate <= transactionSearchRequest.ToDate);
+                    .Where(transaction => transaction.TransactionDate < transactionSearchRequest.ToDate.Value.AddDays(1));
             }
 
             if (transactionSearchRequest.Status != null)

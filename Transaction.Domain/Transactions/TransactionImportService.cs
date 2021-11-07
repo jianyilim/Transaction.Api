@@ -25,11 +25,12 @@ namespace Transaction.Domain.Transactions
             this._unitOfWork = unitOfWork;
             this._logger = logger;
         }
-        public async Task ImportTransactionsAsync(TransactionImportRequest transactionImportRequest)
+
+        public async Task ImportTransactionsAsync(Stream stream, FileFormat fileFormat)
         {
-            IEnumerable<Transaction> transactions = transactionImportRequest.FileFormat == FileFormat.CSV
-                ? this.ReadCSV(transactionImportRequest.File)
-                : this.ReadXML(transactionImportRequest.File);
+            IEnumerable<Transaction> transactions = fileFormat == FileFormat.CSV
+                ? this.ReadCSV(stream)
+                : this.ReadXML(stream);
 
             foreach (Transaction transaction in transactions)
             {
@@ -52,7 +53,7 @@ namespace Transaction.Domain.Transactions
             await this._unitOfWork.SaveAsync();
         }
 
-        private IEnumerable<Transaction> ReadXML(IFormFile formFile)
+        private IEnumerable<Transaction> ReadXML(Stream stream)
         {
             try
             {
@@ -62,7 +63,7 @@ namespace Transaction.Domain.Transactions
             serializer.UnknownAttribute += new
                 XmlAttributeEventHandler(this.serializer_UnknownAttribute);
 
-            using TextReader reader = new StreamReader(formFile.OpenReadStream());
+            using TextReader reader = new StreamReader(stream);
             TransactionsXML transactions = (TransactionsXML)serializer.Deserialize(reader);
             return transactions.Transactions
                 .Select(transactionXML => new Transaction
@@ -82,7 +83,7 @@ namespace Transaction.Domain.Transactions
             }
         }
 
-        private IEnumerable<Transaction> ReadCSV(IFormFile formFile)
+        private IEnumerable<Transaction> ReadCSV(Stream stream)
         {
             try
             {
@@ -90,7 +91,7 @@ namespace Transaction.Domain.Transactions
                 {
                     HasHeaderRecord = false,
                 };
-                using TextReader reader = new StreamReader(formFile.OpenReadStream());
+                using TextReader reader = new StreamReader(stream);
                 using CsvReader csvReader = new CsvReader(reader, config);
                 csvReader.Context.RegisterClassMap<TransactionCSVMap>();
                 IEnumerable<TransactionCSV> value = csvReader.GetRecords<TransactionCSV>();

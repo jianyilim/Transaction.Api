@@ -1,0 +1,52 @@
+[
+  {
+    "Request": {
+      "Currency": "USD"
+    },
+    "ExpectedResult": [
+      {
+        "id": "Inv00001",
+        "payment": "200.00 USD",
+        "status": "D"
+      },
+      {
+        "id": "Invoice0000001",
+        "payment": "1000.00 USD",
+        "status": "A"
+      },
+      {
+        "id": "Invoice0000002",
+        "payment": "300.00 USD",
+        "status": "R"
+      }
+    ],
+    "ExceptionMessage": null
+  },
+  {
+    "Request": {
+      "Status": "A"
+    },
+    "ExpectedResult": [
+      {
+        "id": "Invoice0000001",
+        "payment": "1000.00 USD",
+        "status": "A"
+      }
+    ],
+    "ExceptionMessage": null
+  },
+  {
+    "Request": {
+      "FromDate": "2019-01-24",
+      "ToDate": "2019-01-24"
+    },
+    "ExpectedResult": [
+      {
+        "id": "Inv00002",
+        "payment": "10000.00 EUR",
+        "status": "R"
+      }
+    ],
+    "ExceptionMessage": null
+  }
+]

@@ -34,8 +34,8 @@ namespace Transaction.Domain.Transactions
 
         public void ValidateIdLength()
         {
-            if (this.Id.Length > 50
-                || this.Id.Length <= 0)
+            if (this.Id.Trim().Length > 50
+                || this.Id.Trim().Length <= 0)
             {
                 throw new TransactionException("Id length must be from 1 to 50.");
             }
@@ -43,7 +43,7 @@ namespace Transaction.Domain.Transactions
 
         public void ValidateCurrencyCodeLength()
         {
-            if (this.Id.Length != 3)
+            if (this.CurrencyCode.Trim().Length != 3)
             {
                 throw new TransactionException("CurrencyCode must be in ISO4217 format.");
             }
