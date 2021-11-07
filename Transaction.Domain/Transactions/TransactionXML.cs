@@ -13,7 +13,7 @@ namespace Transaction.Domain.Transactions
 
         public TransactionXMLPaymentDetails PaymentDetails { get; set; }
 
-        public TransactionStatus Status { get; set; }
+        public TransactionStatus? Status { get; set; }
 
     }
 }

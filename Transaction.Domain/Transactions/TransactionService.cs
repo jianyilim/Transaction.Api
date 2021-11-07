@@ -19,10 +19,10 @@ namespace Transaction.Domain.Transactions
         {
             IQueryable<Transaction> query = this._unitOfWork.TransactionRepository.GetAsNoTracking();
 
-            if (!string.IsNullOrEmpty(transactionSearchRequest.Currency))
+            if (!string.IsNullOrEmpty(transactionSearchRequest.CurrencyCode))
             {
                 query = query
-                    .Where(transaction => transaction.CurrencyCode == transactionSearchRequest.Currency);
+                    .Where(transaction => transaction.CurrencyCode == transactionSearchRequest.CurrencyCode);
             }
 
             if (transactionSearchRequest.FromDate != null)

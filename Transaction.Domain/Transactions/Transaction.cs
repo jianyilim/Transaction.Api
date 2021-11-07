@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using ISO._4217;
 using Microsoft.EntityFrameworkCore;
 using Transaction.Domain.Exceptions;
 
@@ -17,6 +19,7 @@ namespace Transaction.Domain.Transactions
         public string Id { get; set; }
 
         [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
         public decimal Amount { get; set; }
 
         [StringLength(3)]
@@ -41,9 +44,11 @@ namespace Transaction.Domain.Transactions
             }
         }
 
-        public void ValidateCurrencyCodeLength()
+        public void ValidateCurrencyCode()
         {
-            if (this.CurrencyCode.Trim().Length != 3)
+            string currencyCode = this.CurrencyCode.Trim();
+            if (currencyCode.Length != 3
+                || CurrencyCodesResolver.GetCurrenciesByCode(currencyCode).Count() == 0)
             {
                 throw new TransactionException("CurrencyCode must be in ISO4217 format.");
             }
@@ -57,11 +62,20 @@ namespace Transaction.Domain.Transactions
             }
         }
 
+        public void ValidateTransactionDate()
+        {
+            if (this.TransactionDate == DateTime.MinValue)
+            {
+                throw new TransactionException("Invalid TransactionDate.");
+            }
+        }
+
         public void Validate()
         {
             this.ValidateIdLength();
-            this.ValidateCurrencyCodeLength();
+            this.ValidateCurrencyCode();
             this.ValidateAmount();
+            this.ValidateTransactionDate();
         }
     }
 }
