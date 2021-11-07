@@ -7,8 +7,8 @@ Assumptions:
 4) CSV file should not have "" as delimiter.
 
 Solutions:
-Transaction.Api - RESTful Api
-Transaction.Domain - Domain layer. (Business logic)
-Transaction.Infrastructure - Infrastructure layer. Input/output implementation.
-Transaction.Domain.Test - Unit testing for domain layer.
+1) Transaction.Api - RESTful Api
+2) Transaction.Domain - Domain layer. (Business logic)
+3) Transaction.Infrastructure - Infrastructure layer. Input/output implementation.
+4) Transaction.Domain.Test - Unit testing for domain layer.
 
