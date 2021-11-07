@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Transaction.Domain.Exceptions;
 
 namespace Transaction.Domain.Transactions
 {
@@ -31,10 +32,36 @@ namespace Transaction.Domain.Transactions
         [MaxLength(8)]
         public byte[] Timestamp { get; set; }
 
-
-        public static void Configure(ModelBuilder modelBuilder)
+        public void ValidateIdLength()
         {
+            if (this.Id.Length > 50
+                || this.Id.Length <= 0)
+            {
+                throw new TransactionException("Id length must be from 1 to 50.");
+            }
+        }
 
+        public void ValidateCurrencyCodeLength()
+        {
+            if (this.Id.Length != 3)
+            {
+                throw new TransactionException("CurrencyCode must be in ISO4217 format.");
+            }
+        }
+
+        public void ValidateAmount()
+        {
+            if (this.Amount <= 0)
+            {
+                throw new TransactionException("Amount must be positive.");
+            }
+        }
+
+        public void Validate()
+        {
+            this.ValidateIdLength();
+            this.ValidateCurrencyCodeLength();
+            this.ValidateAmount();
         }
     }
 }

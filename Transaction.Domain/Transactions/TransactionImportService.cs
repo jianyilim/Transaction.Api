@@ -10,6 +10,7 @@ using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Transaction.Domain.Exceptions;
 using Transaction.Domain.UnitOfWorks;
 
 namespace Transaction.Domain.Transactions
@@ -32,6 +33,8 @@ namespace Transaction.Domain.Transactions
 
             foreach (Transaction transaction in transactions)
             {
+                transaction.Validate();
+
                 Transaction transactionInDb = await this._unitOfWork.TransactionRepository
                       .Get()
                       .Where(t => t.Id == transaction.Id)
@@ -107,8 +110,8 @@ namespace Transaction.Domain.Transactions
                 this._logger.LogError(csvHelperException, csvHelperException.Message);
                 throw new Exception("Unknown format");
             }
-
         }
+
         private void serializer_UnknownNode(object sender, XmlNodeEventArgs e)
         {
             this._logger.LogError("UnknownNode={UnknownNode} Text={Text}", e.Name, e.Text);

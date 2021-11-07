@@ -13,7 +13,6 @@ namespace Transaction.Domain.Transactions
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Transaction.Configure(modelBuilder);
         }
     }
 }
