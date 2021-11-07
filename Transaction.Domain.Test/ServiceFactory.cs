@@ -11,14 +11,19 @@ namespace Transaction.Domain.Test
     public class ServiceFactory
     {
         private static bool setupData = false;
+        private readonly string _databaseName;
         private IServiceScope _serviceScope;
         public IServiceCollection ServiceCollection;
 
-        public ServiceFactory()
+        public ServiceFactory(bool setupData = true, string databaseName = "TransactionDB")
         {
             this.ServiceCollection = new ServiceCollection();
             this.ConfigureServices();
-            this.SetupData();
+            this._databaseName = databaseName;
+            if (setupData)
+            {
+                this.SetupData();
+            }
         }
 
 
@@ -45,7 +50,7 @@ namespace Transaction.Domain.Test
             // Add Db context.
             this.ServiceCollection.AddDbContext<TransactionDbContext>(
             options =>
-                options.UseInMemoryDatabase("TransactionDB")
+                options.UseInMemoryDatabase(this._databaseName)
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll));
 
             this.ServiceCollection.AddScoped<IUnitOfWork, UnitOfWork>();

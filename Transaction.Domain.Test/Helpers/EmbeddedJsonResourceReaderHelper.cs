@@ -31,9 +31,14 @@
             return result;
         }
 
+        public static Stream GetFileStream(string namespaceAndFileName)
+        {
+            return typeof(EmbeddedJsonResourceReaderHelper).GetTypeInfo().Assembly.GetManifestResourceStream(namespaceAndFileName);
+        }
+
         private static string GetEmbeddedJsonResource(string namespaceAndFileName)
         {
-            using (Stream stream = typeof(EmbeddedJsonResourceReaderHelper).GetTypeInfo().Assembly.GetManifestResourceStream(namespaceAndFileName))
+            using (Stream stream = GetFileStream(namespaceAndFileName))
             using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
             {
                 return reader.ReadToEnd();

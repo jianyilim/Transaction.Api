@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Transaction.Domain.Exceptions;
 using Transaction.Domain.UnitOfWorks;
 
 namespace Transaction.Domain.Transactions
@@ -58,23 +56,23 @@ namespace Transaction.Domain.Transactions
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(TransactionsXML));
-            serializer.UnknownNode += new
-                XmlNodeEventHandler(this.serializer_UnknownNode);
-            serializer.UnknownAttribute += new
-                XmlAttributeEventHandler(this.serializer_UnknownAttribute);
+                serializer.UnknownNode += new
+                    XmlNodeEventHandler(this.serializer_UnknownNode);
+                serializer.UnknownAttribute += new
+                    XmlAttributeEventHandler(this.serializer_UnknownAttribute);
 
-            using TextReader reader = new StreamReader(stream);
-            TransactionsXML transactions = (TransactionsXML)serializer.Deserialize(reader);
-            return transactions.Transactions
-                .Select(transactionXML => new Transaction
-                {
-                    Id = transactionXML.Id.Trim(),
-                    Amount = transactionXML.PaymentDetails.Amount,
-                    CurrencyCode = transactionXML.PaymentDetails.CurrencyCode.Trim(),
-                    TransactionDate = transactionXML.TransactionDate,
-                    Status = transactionXML.Status,
-                })
-                .ToList();
+                using TextReader reader = new StreamReader(stream);
+                TransactionsXML transactions = (TransactionsXML)serializer.Deserialize(reader);
+                return transactions.Transactions
+                    .Select(transactionXML => new Transaction
+                    {
+                        Id = transactionXML.Id.Trim(),
+                        Amount = transactionXML.PaymentDetails.Amount,
+                        CurrencyCode = transactionXML.PaymentDetails.CurrencyCode.Trim(),
+                        TransactionDate = transactionXML.TransactionDate,
+                        Status = transactionXML.Status,
+                    })
+                    .ToList();
             }
             catch (InvalidOperationException invalidOperationException)
             {

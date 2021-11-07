@@ -8,10 +8,26 @@
 
   <ItemGroup>
     <None Remove="GetTransactionsTestCases.json" />
+    <None Remove="ImportFile.csv" />
+    <None Remove="ImportFile.error" />
+    <None Remove="ImportFile.xml" />
+    <None Remove="ImportFileAmountError.xml" />
+    <None Remove="ImportFileCurrencyError.xml" />
+    <None Remove="ImportFileIdError.csv" />
+    <None Remove="ImportFileIdError.xml" />
+    <None Remove="ImportTransactionsTestCases.json" />
     <None Remove="InitialData.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="ImportFileIdError.csv" />
+    <EmbeddedResource Include="ImportFileAmountError.xml" />
+    <EmbeddedResource Include="ImportFileIdError.xml" />
+    <EmbeddedResource Include="ImportFileCurrencyError.xml" />
+    <EmbeddedResource Include="ImportFile.error" />
+    <EmbeddedResource Include="ImportFile.xml" />
+    <EmbeddedResource Include="ImportFile.csv" />
+    <EmbeddedResource Include="ImportTransactionsTestCases.json" />
     <EmbeddedResource Include="InitialData.json" />
     <EmbeddedResource Include="GetTransactionsTestCases.json" />
   </ItemGroup>
