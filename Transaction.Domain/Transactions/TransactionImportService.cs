@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -50,7 +51,9 @@ namespace Transaction.Domain.Transactions
 
         private IEnumerable<Transaction> ReadXML(IFormFile formFile)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(TransactionsXML));
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(TransactionsXML));
             serializer.UnknownNode += new
                 XmlNodeEventHandler(this.serializer_UnknownNode);
             serializer.UnknownAttribute += new
@@ -68,38 +71,53 @@ namespace Transaction.Domain.Transactions
                     Status = transactionXML.Status,
                 })
                 .ToList();
+            }
+            catch (InvalidOperationException invalidOperationException)
+            {
+                this._logger.LogError(invalidOperationException, invalidOperationException.Message);
+                throw new Exception("Unknown format");
+            }
         }
 
         private IEnumerable<Transaction> ReadCSV(IFormFile formFile)
         {
-            CsvConfiguration config = new CsvConfiguration(new CultureInfo("en-GB"))
+            try
             {
-                HasHeaderRecord = false,
-            };
-            using TextReader reader = new StreamReader(formFile.OpenReadStream());
-            using CsvReader csvReader = new CsvReader(reader, config);
-            csvReader.Context.RegisterClassMap<TransactionCSVMap>();
-            IEnumerable<TransactionCSV> value = csvReader.GetRecords<TransactionCSV>();
-            return value
-                .Select(transactionCSV => new Transaction
-                { 
-                    Id = transactionCSV.Id.Trim(),
-                    Amount = transactionCSV.Amount,
-                    CurrencyCode = transactionCSV.CurrencyCode.Trim(),
-                    TransactionDate = transactionCSV.TransactionDate,
-                    Status = (TransactionStatus)(int)transactionCSV.Status,
-                })
-                .ToList();
+                CsvConfiguration config = new CsvConfiguration(new CultureInfo("en-GB"))
+                {
+                    HasHeaderRecord = false,
+                };
+                using TextReader reader = new StreamReader(formFile.OpenReadStream());
+                using CsvReader csvReader = new CsvReader(reader, config);
+                csvReader.Context.RegisterClassMap<TransactionCSVMap>();
+                IEnumerable<TransactionCSV> value = csvReader.GetRecords<TransactionCSV>();
+                return value
+                    .Select(transactionCSV => new Transaction
+                    {
+                        Id = transactionCSV.Id.Trim(),
+                        Amount = transactionCSV.Amount,
+                        CurrencyCode = transactionCSV.CurrencyCode.Trim(),
+                        TransactionDate = transactionCSV.TransactionDate,
+                        Status = (TransactionStatus)(int)transactionCSV.Status,
+                    })
+                    .ToList();
+            }
+            catch (CsvHelperException csvHelperException)
+            {
+                this._logger.LogError(csvHelperException, csvHelperException.Message);
+                throw new Exception("Unknown format");
+            }
+
         }
         private void serializer_UnknownNode(object sender, XmlNodeEventArgs e)
         {
-            this._logger.LogError("Unknown Node:" + e.Name + "\t" + e.Text);
+            this._logger.LogError("UnknownNode={UnknownNode} Text={Text}", e.Name, e.Text);
         }
 
         private void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)
         {
             System.Xml.XmlAttribute attr = e.Attr;
-            this._logger.LogError("Unknown attribute " + attr.Name + "='" + attr.Value + "'");
+            this._logger.LogError("UnknownAttribute={UnknownAttribute} Value={Value}", attr.Name, attr.Value);
         }
     }
 }
