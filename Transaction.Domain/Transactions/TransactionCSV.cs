@@ -9,7 +9,7 @@ namespace Transaction.Domain.Transactions
         public string Id { get; set; }
 
         [DataType(DataType.Currency)]
-        public float Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [StringLength(3)]
         public string CurrencyCode { get; set; }

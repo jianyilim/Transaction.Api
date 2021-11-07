@@ -3,10 +3,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Transaction.Domain.UnitOfWorks;
 
 namespace Transaction.Domain.Transactions
@@ -14,10 +16,12 @@ namespace Transaction.Domain.Transactions
     public class TransactionImportService : ITransactionImportService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger _logger;
 
-        public TransactionImportService(IUnitOfWork unitOfWork)
+        public TransactionImportService(IUnitOfWork unitOfWork, ILogger<TransactionImportService> logger)
         {
             this._unitOfWork = unitOfWork;
+            this._logger = logger;
         }
         public async Task ImportTransactionsAsync(TransactionImportRequest transactionImportRequest)
         {
@@ -46,23 +50,24 @@ namespace Transaction.Domain.Transactions
 
         private IEnumerable<Transaction> ReadXML(IFormFile formFile)
         {
-            CsvConfiguration config = new CsvConfiguration(new CultureInfo("en-GB"))
-            {
-                HasHeaderRecord = false,
-            };
+            XmlSerializer serializer = new XmlSerializer(typeof(TransactionsXML));
+            serializer.UnknownNode += new
+                XmlNodeEventHandler(this.serializer_UnknownNode);
+            serializer.UnknownAttribute += new
+                XmlAttributeEventHandler(this.serializer_UnknownAttribute);
+
             using TextReader reader = new StreamReader(formFile.OpenReadStream());
-            using CsvReader csvReader = new CsvReader(reader, config);
-            csvReader.Context.RegisterClassMap<TransactionCSVMap>();
-            IEnumerable<TransactionCSV> value = csvReader.GetRecords<TransactionCSV>();
-            return value
-                .Select(transactionCSV => new Transaction
+            TransactionsXML transactions = (TransactionsXML)serializer.Deserialize(reader);
+            return transactions.Transactions
+                .Select(transactionXML => new Transaction
                 {
-                    Id = transactionCSV.Id.Trim(),
-                    Amount = transactionCSV.Amount,
-                    CurrencyCode = transactionCSV.CurrencyCode.Trim(),
-                    TransactionDate = transactionCSV.TransactionDate,
-                    Status = (TransactionStatus)(int)transactionCSV.Status,
-                });
+                    Id = transactionXML.Id.Trim(),
+                    Amount = transactionXML.PaymentDetails.Amount,
+                    CurrencyCode = transactionXML.PaymentDetails.CurrencyCode.Trim(),
+                    TransactionDate = transactionXML.TransactionDate,
+                    Status = transactionXML.Status,
+                })
+                .ToList();
         }
 
         private IEnumerable<Transaction> ReadCSV(IFormFile formFile)
@@ -85,6 +90,16 @@ namespace Transaction.Domain.Transactions
                     Status = (TransactionStatus)(int)transactionCSV.Status,
                 })
                 .ToList();
+        }
+        private void serializer_UnknownNode(object sender, XmlNodeEventArgs e)
+        {
+            this._logger.LogError("Unknown Node:" + e.Name + "\t" + e.Text);
+        }
+
+        private void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)
+        {
+            System.Xml.XmlAttribute attr = e.Attr;
+            this._logger.LogError("Unknown attribute " + attr.Name + "='" + attr.Value + "'");
         }
     }
 }

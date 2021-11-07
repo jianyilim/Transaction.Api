@@ -5,7 +5,7 @@ namespace Transaction.Domain.Transactions
     [XmlRoot("Transactions", IsNullable = false)]
     public class TransactionsXML
     {
-        [XmlArray("Items")]
+        [XmlElement("Transaction")]
         public TransactionXML[] Transactions { get; set; }
     }
 }
