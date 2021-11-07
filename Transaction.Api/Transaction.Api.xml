@@ -4,5 +4,19 @@
         <name>Transaction.Api</name>
     </assembly>
     <members>
+        <member name="M:Transaction.Api.Controllers.TransactionController.ImportTransactionsAsync(Transaction.Domain.Transactions.TransactionImportRequest,Transaction.Domain.Transactions.ITransactionImportService)">
+            <summary>
+            Import transactions.
+            </summary>
+            <param name="transactionImportRequest">File.</param>
+            <param name="transactionImportService">Import service object.</param>
+            <returns>Status code OK if succeeded.</returns>
+        </member>
+        <member name="M:Transaction.Api.Controllers.TransactionController.GetAsync(Transaction.Domain.Transactions.ITransactionService,Transaction.Domain.Transactions.TransactionSearchRequest)">
+            <summary>
+            Get transactions.
+            </summary>
+            <returns>A list of transactions.</returns>
+        </member>
     </members>
 </doc>
