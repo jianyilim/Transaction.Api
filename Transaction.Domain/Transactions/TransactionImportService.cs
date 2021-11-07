@@ -9,6 +9,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Transaction.Domain.Exceptions;
 using Transaction.Domain.UnitOfWorks;
 
 namespace Transaction.Domain.Transactions
@@ -66,11 +67,11 @@ namespace Transaction.Domain.Transactions
                 return transactions.Transactions
                     .Select(transactionXML => new Transaction
                     {
-                        Id = transactionXML.Id.Trim(),
-                        Amount = transactionXML.PaymentDetails.Amount,
-                        CurrencyCode = transactionXML.PaymentDetails.CurrencyCode.Trim(),
+                        Id = (transactionXML.Id ?? throw new TransactionException("Missing Id.")).Trim(),
+                        Amount = transactionXML.PaymentDetails.Amount ?? throw new TransactionException("Missing amount."),
+                        CurrencyCode = (transactionXML.PaymentDetails.CurrencyCode ?? throw new TransactionException("Missing CurrencyCode.")).Trim().ToUpper(),
                         TransactionDate = transactionXML.TransactionDate,
-                        Status = transactionXML.Status,
+                        Status = transactionXML.Status ?? throw new TransactionException("Missing status."),
                     })
                     .ToList();
             }
@@ -96,9 +97,9 @@ namespace Transaction.Domain.Transactions
                 return value
                     .Select(transactionCSV => new Transaction
                     {
-                        Id = transactionCSV.Id.Trim(),
+                        Id = (transactionCSV.Id ?? throw new TransactionException("Missing Id.")).Trim(),
                         Amount = transactionCSV.Amount,
-                        CurrencyCode = transactionCSV.CurrencyCode.Trim(),
+                        CurrencyCode = (transactionCSV.CurrencyCode ?? throw new TransactionException("Missing CurrencyCode.")).Trim().ToUpper(),
                         TransactionDate = transactionCSV.TransactionDate,
                         Status = (TransactionStatus)(int)transactionCSV.Status,
                     })
