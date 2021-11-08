@@ -1,7 +1,7 @@
 [
   {
     "Request": {
-      "Currency": "USD"
+      "CurrencyCode": "USD"
     },
     "ExpectedResult": [
       {
